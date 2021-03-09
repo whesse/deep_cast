@@ -1,0 +1,31 @@
+
+
+dynamic deepCast(dynamic template, dynamic object, {String keyWildcard = '*'}) {
+  if (object is Map<String, dynamic>) {
+    if (template is Map<String, dynamic>) {
+      result = Map.of(template)..clear();
+      for (final key in object.keys) {
+        final valueTemplate = template[key] ?? template[keyWildcard];
+        result[key] = (valueTemplate == null) ? object[key] :
+         deepCast(valueTemplate, object[key]);
+        } 
+    } else {
+      throwMismatch(template.runtimeType, object.runtimeType);
+    }
+  } else if (object is List) {
+    if (template is List) {
+      result = List.of(template);
+      
+  } else return object;
+}
+
+void main() {
+  final list = [ {'foo': 1}];
+  List dynamicList = list;
+  print(List.from(list).runtimeType);
+  print(List.from(dynamicList).runtimeType);
+  print(List.of(list).runtimeType);
+  print(List.of(dynamicList).runtimeType);
+  print(list.runtimeType);
+  print(dynamicList.runtimeType);
+}
